@@ -9,153 +9,31 @@ BeginPackage["myFunctions`"];
 
 
 (* TBdetrend *)
-TBdetrend::usage="\!\(\*
-StyleBox[\"smooth\",\nFontSlant->\"Italic\"]\)=TBdetrend[\!\(\*
-StyleBox[\"data\",\nFontSlant->\"Italic\"]\),\!\(\*
-StyleBox[\"bandwidth\",\nFontSlant->\"Italic\"]\)] uses a Gaussian filter to smooth data
-\!\(\*
-StyleBox[\"Input\",\nFontWeight->\"Bold\"]\)\!\(\*
-StyleBox[\" \",\nFontWeight->\"Bold\"]\)\!\(\*
-StyleBox[\"vars\",\nFontWeight->\"Bold\"]\)
+TBdetrend::usage="smooth=TBdetrend[data, bandwidth] uses a Gaussian filter to smooth data
+Input vars
 data: 1xn array - time-series
 bandwidth: number in (0,1) - proportion of the length of data to use as a bandwidth
-\!\(\*
-StyleBox[\"Output\",\nFontWeight->\"Bold\"]\)\!\(\*
-StyleBox[\" \",\nFontWeight->\"Bold\"]\)\!\(\*
-StyleBox[\"vars\",\nFontWeight->\"Bold\"]\)\!\(\*
-StyleBox[\"\\\\n\",\nFontWeight->\"Bold\"]\)\!\(\*
-StyleBox[\"smooth\",\nFontWeight->\"Plain\"]\)\!\(\*
-StyleBox[\":\",\nFontWeight->\"Plain\"]\)\!\(\*
-StyleBox[\" \",\nFontWeight->\"Plain\"]\)\!\(\*
-StyleBox[\"1\",\nFontWeight->\"Plain\"]\)\!\(\*
-StyleBox[\"xn\",\nFontWeight->\"Plain\"]\)\!\(\*
-StyleBox[\" \",\nFontWeight->\"Plain\"]\)\!\(\*
-StyleBox[\"array\",\nFontWeight->\"Plain\"]\)\!\(\*
-StyleBox[\" \",\nFontWeight->\"Plain\"]\)\!\(\*
-StyleBox[\"of\",\nFontWeight->\"Plain\"]\)\!\(\*
-StyleBox[\" \",\nFontWeight->\"Plain\"]\)\!\(\*
-StyleBox[\"smoothed\",\nFontWeight->\"Plain\"]\)\!\(\*
-StyleBox[\" \",\nFontWeight->\"Plain\"]\)\!\(\*
-StyleBox[\"data\",\nFontWeight->\"Plain\"]\)";
+Output vars
+smooth: 1xn array of smoothed data";
 
 
 (* TBvariance *)
-TBvariance::usage="\!\(\*
-StyleBox[\"varSeries\",\nFontSlant->\"Italic\"]\)=TBvariance[\!\(\*
-StyleBox[\"residuals\",\nFontSlant->\"Italic\"]\)\!\(\*
-StyleBox[\",\",\nFontSlant->\"Italic\"]\)\!\(\*
-StyleBox[\" \",\nFontSlant->\"Italic\"]\)\!\(\*
-StyleBox[\"rollWindow\",\nFontSlant->\"Italic\"]\)] computes the variance of \!\(\*
-StyleBox[\"residuals\",\nFontSlant->\"Italic\"]\) over a rolling window.
-\!\(\*
-StyleBox[\"Input\",\nFontWeight->\"Bold\"]\)\!\(\*
-StyleBox[\" \",\nFontWeight->\"Bold\"]\)\!\(\*
-StyleBox[\"vars\",\nFontWeight->\"Bold\"]\)
-residuals: 1xn array - residuals of time-series data - should be stationary
+TBvariance::usage="varSeries=TBvariance[data, rollWindow] computes the variance of data over a rolling window
+Input vars
+data: 1xn array - time-series (residuals)
 rollWindow: number in (0,1) - proportion of the length of data to use as a rolling window
-\!\(\*
-StyleBox[\"Output\",\nFontWeight->\"Bold\"]\)\!\(\*
-StyleBox[\" \",\nFontWeight->\"Bold\"]\)\!\(\*
-StyleBox[\"vars\",\nFontWeight->\"Bold\"]\)\!\(\*
-StyleBox[\"\\\\n\",\nFontWeight->\"Bold\"]\)\!\(\*
-StyleBox[\"varSeries\",\nFontWeight->\"Plain\"]\)\!\(\*
-StyleBox[\":\",\nFontWeight->\"Plain\"]\)\!\(\*
-StyleBox[\" \",\nFontWeight->\"Plain\"]\)\!\(\*
-StyleBox[\"1\",\nFontWeight->\"Plain\"]\)\!\(\*
-StyleBox[\"x\",\nFontWeight->\"Plain\"]\)\!\(\*
-StyleBox[\"(\",\nFontWeight->\"Plain\"]\)\!\(\*
-StyleBox[\"(\",\nFontWeight->\"Plain\"]\)\!\(\*
-StyleBox[\"1\",\nFontWeight->\"Plain\"]\)\!\(\*
-StyleBox[\"-\",\nFontWeight->\"Plain\"]\)\!\(\*
-StyleBox[\"rollWindow\",\nFontWeight->\"Plain\"]\)\!\(\*
-StyleBox[\")\",\nFontWeight->\"Plain\"]\)\!\(\*
-StyleBox[\"n\",\nFontWeight->\"Plain\"]\)\!\(\*
-StyleBox[\")\",\nFontWeight->\"Plain\"]\)\!\(\*
-StyleBox[\" \",\nFontWeight->\"Plain\"]\)\!\(\*
-StyleBox[\"array\",\nFontWeight->\"Plain\"]\)\!\(\*
-StyleBox[\"\\\\n\",\nFontWeight->\"Plain\"]\)";
+Output vars
+varSeries: variance as a time-series, 1x(1-rollWindow)n array ";
 
 
 (* TBautocorrelation *)
-TBautocorrelation::usage="\!\(\*
-StyleBox[\"acSeries\",\nFontSlant->\"Italic\"]\)=TBdetrend[\!\(\*
-StyleBox[\"residuals\",\nFontSlant->\"Italic\"]\)\!\(\*
-StyleBox[\",\",\nFontSlant->\"Italic\"]\)\!\(\*
-StyleBox[\" \",\nFontSlant->\"Italic\"]\)\!\(\*
-StyleBox[\"rollWindow\",\nFontSlant->\"Italic\"]\)\!\(\*
-StyleBox[\",\",\nFontSlant->\"Italic\"]\)\!\(\*
-StyleBox[\" \",\nFontSlant->\"Italic\"]\)\!\(\*
-StyleBox[\"lag\",\nFontSlant->\"Italic\"]\)] computes the autocorrelation of \!\(\*
-StyleBox[\"residuals\",\nFontSlant->\"Italic\"]\) over a rolling window.
-\!\(\*
-StyleBox[\"Input\",\nFontWeight->\"Bold\"]\)\!\(\*
-StyleBox[\" \",\nFontWeight->\"Bold\"]\)\!\(\*
-StyleBox[\"vars\",\nFontWeight->\"Bold\"]\)
-residuals: 1xn array - residuals of time-series data - should be stationary
+TBautocorrelation::usage="acSeries=TBautocorrelation[data, rollWindow,lagTime] computes the autocorrelation at lag lagTime of data over a rolling window
+Input vars
+data: 1xn array - time-series (residuals)
 rollWindow: number in (0,1) - proportion of the length of data to use as a rolling window
-lag: ingeger value - lag between data points where correlation evaluated.
-\!\(\*
-StyleBox[\"Output\",\nFontWeight->\"Bold\"]\)\!\(\*
-StyleBox[\" \",\nFontWeight->\"Bold\"]\)\!\(\*
-StyleBox[\"vars\",\nFontWeight->\"Bold\"]\)\!\(\*
-StyleBox[\"\\\\n\",\nFontWeight->\"Bold\"]\)\!\(\*
-StyleBox[\"acSeries\",\nFontWeight->\"Plain\"]\)\!\(\*
-StyleBox[\":\",\nFontWeight->\"Plain\"]\)\!\(\*
-StyleBox[\" \",\nFontWeight->\"Plain\"]\)\!\(\*
-StyleBox[\"1\",\nFontWeight->\"Plain\"]\)\!\(\*
-StyleBox[\"x\",\nFontWeight->\"Plain\"]\)\!\(\*
-StyleBox[\"(\",\nFontWeight->\"Plain\"]\)\!\(\*
-StyleBox[\"(\",\nFontWeight->\"Plain\"]\)\!\(\*
-StyleBox[\"1\",\nFontWeight->\"Plain\"]\)\!\(\*
-StyleBox[\"-\",\nFontWeight->\"Plain\"]\)\!\(\*
-StyleBox[\"rollWindow\",\nFontWeight->\"Plain\"]\)\!\(\*
-StyleBox[\")\",\nFontWeight->\"Plain\"]\)\!\(\*
-StyleBox[\"n\",\nFontWeight->\"Plain\"]\)\!\(\*
-StyleBox[\")\",\nFontWeight->\"Plain\"]\)\!\(\*
-StyleBox[\" \",\nFontWeight->\"Plain\"]\)\!\(\*
-StyleBox[\"array\",\nFontWeight->\"Plain\"]\)\!\(\*
-StyleBox[\"\\\\n\",\nFontWeight->\"Plain\"]\)";
-
-
-(* TBautocorrelation *)
-TBautocorrelation::usage="\!\(\*
-StyleBox[\"acSeries\",\nFontSlant->\"Italic\"]\)=TBdetrend[\!\(\*
-StyleBox[\"residuals\",\nFontSlant->\"Italic\"]\)\!\(\*
-StyleBox[\",\",\nFontSlant->\"Italic\"]\)\!\(\*
-StyleBox[\" \",\nFontSlant->\"Italic\"]\)\!\(\*
-StyleBox[\"rollWindow\",\nFontSlant->\"Italic\"]\)\!\(\*
-StyleBox[\",\",\nFontSlant->\"Italic\"]\)\!\(\*
-StyleBox[\" \",\nFontSlant->\"Italic\"]\)\!\(\*
-StyleBox[\"lag\",\nFontSlant->\"Italic\"]\)] computes the autocorrelation of \!\(\*
-StyleBox[\"residuals\",\nFontSlant->\"Italic\"]\) over a rolling window.
-\!\(\*
-StyleBox[\"Input\",\nFontWeight->\"Bold\"]\)\!\(\*
-StyleBox[\" \",\nFontWeight->\"Bold\"]\)\!\(\*
-StyleBox[\"vars\",\nFontWeight->\"Bold\"]\)
-residuals: 1xn array - residuals of time-series data - should be stationary
-rollWindow: number in (0,1) - proportion of the length of data to use as a rolling window
-lag: ingeger value - lag between data points where correlation evaluated.
-\!\(\*
-StyleBox[\"Output\",\nFontWeight->\"Bold\"]\)\!\(\*
-StyleBox[\" \",\nFontWeight->\"Bold\"]\)\!\(\*
-StyleBox[\"vars\",\nFontWeight->\"Bold\"]\)\!\(\*
-StyleBox[\"\\\\n\",\nFontWeight->\"Bold\"]\)\!\(\*
-StyleBox[\"acSeries\",\nFontWeight->\"Plain\"]\)\!\(\*
-StyleBox[\":\",\nFontWeight->\"Plain\"]\)\!\(\*
-StyleBox[\" \",\nFontWeight->\"Plain\"]\)\!\(\*
-StyleBox[\"1\",\nFontWeight->\"Plain\"]\)\!\(\*
-StyleBox[\"x\",\nFontWeight->\"Plain\"]\)\!\(\*
-StyleBox[\"(\",\nFontWeight->\"Plain\"]\)\!\(\*
-StyleBox[\"(\",\nFontWeight->\"Plain\"]\)\!\(\*
-StyleBox[\"1\",\nFontWeight->\"Plain\"]\)\!\(\*
-StyleBox[\"-\",\nFontWeight->\"Plain\"]\)\!\(\*
-StyleBox[\"rollWindow\",\nFontWeight->\"Plain\"]\)\!\(\*
-StyleBox[\")\",\nFontWeight->\"Plain\"]\)\!\(\*
-StyleBox[\"n\",\nFontWeight->\"Plain\"]\)\!\(\*
-StyleBox[\")\",\nFontWeight->\"Plain\"]\)\!\(\*
-StyleBox[\" \",\nFontWeight->\"Plain\"]\)\!\(\*
-StyleBox[\"array\",\nFontWeight->\"Plain\"]\)\!\(\*
-StyleBox[\"\\\\n\",\nFontWeight->\"Plain\"]\)";
+lagTime: integer value - spacing between data points for computing autocorrelation
+Output vars
+acSeries: autocorrelation as a time-series, 1x(1-rollWindow)n array ";
 
 
 (* ::Section:: *)
