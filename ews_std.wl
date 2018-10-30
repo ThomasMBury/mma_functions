@@ -66,12 +66,12 @@ skewSeries: time-series of skewness in residuals";
 (* TBindPlot *)
 TBindPlot::usage="plot = TBindPlot[data] takes in times-series data and produces a plot with the chosen specifications.
 Input vars
-data: time-series of the form {{t1,x1},{t2,x2},...,{tn,xn}}
+data: list of time-series of the form {{t1,x1},{t2,x2},...,{tn,xn}}
 
 Optional arguments (default)
 TBxAxes: (False) : choose whether to include x ticks and label
-TBlabel: ("") : figure label in top left corner
-TByLabel: ("") : y axes label
+TBlabel: ('' '') : figure label in top left corner
+TByLabel: ('' '') : y axes label
 TBarrow: (False) : choose whether to include an arrow denoting rolling window
 TByRange: (All) : specify a particular range in y values
 
@@ -177,7 +177,7 @@ output={smooth,residuals,variance,autocorrelation,skewness}
 (* TBindPlot *)
 
 (* define options and their defualt settings *)
-Options[TBindPlot]={TBxAxes->True,TBlabel->"",TByLabel->"",TBarrow->False,TByRange->All};
+Options[TBindPlot]={TBxAxes->True,TBlabel->"",TByLabel->"",TBarrow->False,PlotRange->All};
 
 TBindPlot[data_,opts:OptionsPattern[]]:=
 Module[{xAxes,label,yLabel,arrow,yRange},
@@ -186,12 +186,10 @@ xAxes=OptionValue[TBxAxes];
 label=OptionValue[TBlabel];
 yLabel=OptionValue[TByLabel];
 arrow=OptionValue[TBarrow];
-yRange=OptionValue[TByRange];
 
 (* make the plot *)
 ListLinePlot[data,FilterRules[{opts},Options[ListLinePlot]],
 Frame->True,
-PlotRange->{{0,Max[data[[;;,1]]]},yRange},
 LabelStyle->14,
 FrameLabel->{{yLabel,""},{If[xAxes,"Time",""],""}},FrameTicksStyle->If[xAxes,{{Automatic,Automatic},{Automatic,Automatic}},
 {{Automatic,Automatic},{Directive[FontOpacity->0,FontSize->0],Automatic}}],
@@ -200,7 +198,7 @@ ImagePadding->{{60,50},{If[xAxes,40,20],20}},
 ImageSize->400,
 AspectRatio->0.3,
 Epilog->{Directive[{Black}],Arrowheads[{-0.03,0.03}],
-If[arrow,Arrow[{Scaled[{0,0.15},{0,0}],Scaled[{0,0.15},{Min[data[[;;,1]]],0}]}]],
+If[arrow,Arrow[{Scaled[{0,0.15},{0,0}],Scaled[{0,0.15},{Min[data[[1,1,1]]],0}]}]],
 Text[Style[label,14,Bold],Scaled[{0.035,0.86}]]}
 ]
 ];

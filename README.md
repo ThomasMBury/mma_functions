@@ -29,7 +29,8 @@ The input to this function can simply be the (any subset of) the output to TBews
 
 ## ews_spec.wl
 
-This package includes functions to compute various spectral properties of time-series data that can be used as EWS.
+This package includes functions to compute various spectral properties of time-series data 
+that can enhance traditional EWS (to be published).
 
 
 
